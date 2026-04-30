@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nonans"
+version = "1.0.4"
+description = "The numerical continuity layer for GPU computing."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "NoNans Engineering", email = "infra@nonans.com" }]
+keywords = [
+    "pytorch",
+    "cuda",
+    "training",
+    "infrastructure",
+    "numerical-stability",
+    "ml-infrastructure",
+    "nan",
+    "gpu",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Distributed Computing",
+]
+
+dependencies = [
+    "torch>=2.1",
+]
+
+[project.optional-dependencies]
+runtime = [
+    # The licensed runtime client. Installs the binary extension from a
+    # private index. Users on the free tier do not need this; they get
+    # detection-only behavior.
+    "nonans-runtime>=1.0.4",
+]
+bench = [
+    "vllm>=0.5; platform_system == 'Linux'",
+]
+dev = [
+    "pytest>=7",
+    "pytest-cov",
+    "ruff>=0.5",
+    "mypy>=1.8",
+]
+
+[project.urls]
+Homepage = "https://nonans.com"
+Documentation = "https://nonans.com/docs"
+Benchmark = "https://nonans.com/benchmark.html"
+Source = "https://github.com/nonans/nonans"
+Issues = "https://github.com/nonans/nonans/issues"
+Security = "mailto:security@nonans.com"
+
+[tool.hatch.build.targets.wheel]
+packages = ["nonans"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+ignore = ["E501", "F401", "B028"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"

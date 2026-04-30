@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify Python syntax across the repo
+        run: |
+          python -c "
+          import ast, pathlib, sys
+          errors = []
+          for p in pathlib.Path('.').rglob('*.py'):
+              try: ast.parse(p.read_text())
+              except SyntaxError as e: errors.append(f'{p}: {e}')
+          if errors:
+              for e in errors: print('ERR:', e)
+              sys.exit(1)
+          "
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff==0.6.9
+      - name: Lint
+        run: |
+          ruff check nonans/ tests/ \
+            --select=E,F,W,B \
+            --ignore=E501,F401,B028 \
+            --no-cache
+
+  test-no-torch:
+    name: Test without torch (verifies graceful degradation)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m unittest discover -s tests -v
+
+  test-with-torch:
+    name: Test with torch installed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m unittest discover -s tests -v
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [syntax, lint, test-no-torch]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build
+      - run: python -m build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/

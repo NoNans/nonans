@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" role="img" aria-label="NoNans — The numerical continuity layer for GPU computing">
+  <title>NoNans</title>
+  <rect width="1280" height="640" fill="#0a0a0c"/>
+  <rect x="0" y="0" width="1280" height="640" fill="url(#g)" opacity="0.4"/>
+  <defs>
+    <radialGradient id="g" cx="50%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#7c6bff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0a0a0c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path d="M380 200 L380 440 L440 440 L440 320 L560 440 L620 440 L620 200 L560 200 L560 320 L440 200 Z" fill="#a599ff"/>
+  <text x="680" y="320" font-family="Geist, -apple-system, sans-serif" font-weight="800" font-size="96" fill="#ffffff" letter-spacing="-3">NoNans</text>
+  <text x="680" y="380" font-family="Geist, -apple-system, sans-serif" font-weight="300" font-size="28" fill="#a8a8b8" letter-spacing="-0.5">The numerical continuity layer</text>
+  <text x="680" y="416" font-family="Geist, -apple-system, sans-serif" font-weight="300" font-size="28" fill="#a8a8b8" letter-spacing="-0.5">for GPU computing.</text>
+  <text x="380" y="540" font-family="ui-monospace, 'Geist Mono', monospace" font-size="18" fill="#6e6e7e" letter-spacing="2">PATENT PENDING · NONANS.COM</text>
+</svg>
